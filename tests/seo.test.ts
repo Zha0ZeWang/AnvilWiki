@@ -14,6 +14,11 @@ import {
 import { fallbackDetailPaths } from '~/lib/fallback-paths';
 import { site } from '~/config/site';
 import { authors } from '~/config/authors';
+import type { Locale } from '~/i18n/routing';
+
+// The fork ships en-only, but the locale-coverage mechanics are generic
+// framework behavior — keep exercising them with a synthetic locale.
+const ja = "ja" as unknown as Locale;
 
 /** Repo-root-relative source text (contract-test helper, handbook.test.ts style). */
 const src = (rel: string) => readFileSync(fileURLToPath(new URL(`../${rel}`, import.meta.url)), 'utf8');
@@ -116,7 +121,7 @@ describe('SEO helpers', () => {
         categoryLabel: 'ボス一覧',
         title: 'エンバーファング攻略',
         slug: 'emberfang',
-        locale: 'ja',
+        locale: ja,
       });
       expect(json.itemListElement[0].item).toMatch(/\/ja\/$/);
     });
@@ -124,7 +129,7 @@ describe('SEO helpers', () => {
 
   describe('simpleBreadcrumbJsonLd', () => {
     it('emits the Home item with a trailing slash for every locale', () => {
-      for (const locale of ['en', 'ja'] as const) {
+      for (const locale of ['en', ja] as const) {
         const json = simpleBreadcrumbJsonLd({
           pageLabel: 'All Bosses',
           path: '/bosses/',
@@ -182,8 +187,8 @@ describe('SEO helpers', () => {
     });
 
     it('skips the suffix when the title already carries the game name', () => {
-      const t = pageTitle('Anvil Quest Boss Guide');
-      expect(t).toBe('Anvil Quest Boss Guide');
+      const t = pageTitle(`${site.game.name} Boss Guide`);
+      expect(t).toBe(`${site.game.name} Boss Guide`);
     });
 
     it('switches to the short suffix for long titles (>50 chars)', () => {
@@ -194,17 +199,17 @@ describe('SEO helpers', () => {
   });
 
   describe('fallbackDetailPaths', () => {
-    const locales = ['en', 'ja'] as const;
+    const locales = ['en', ja] as const;
     // Coverage shape mirrors astro.config's localeCoverage: "cat/slug" →
     // locales that really have a published MDX.
     const coverage = new Map<string, Set<string>>([
       // English-only article → /ja/ URL is a fallback page.
       ['bosses/stormcaller', new Set(['en'])],
       // Translated in both locales → both URLs are real pages.
-      ['bosses/emberfang', new Set(['en', 'ja'])],
+      ['bosses/emberfang', new Set(['en', ja])],
       // ja-only article → /ja/ is real; en never falls back (no /ja/-owned
       // English URL exists to begin with).
-      ['guides/ja-only', new Set(['ja'])],
+      ['guides/ja-only', new Set([ja])],
       // Nested slug folds into the key after the category.
       ['guides/nested/deep-slug', new Set(['en'])],
       // CJK slug keeps raw filesystem names (sitemap filter decodes first).

@@ -95,7 +95,7 @@ pnpm dev              # dev server, http://localhost:4321
 pnpm build            # includes Content schema validation — fails on bad frontmatter; postbuild indexes Pagefind search
 pnpm typecheck        # astro check (0 errors expected)
 pnpm lint             # ESLint (eslint-plugin-astro)
-pnpm test             # Vitest — 24 suites (url, seo, tags, i18n-smoke, content-utils, handbook, workflows, covers, consent, affiliates, prompt, apply-template, sync-codes, community-digest, today, redirects, changelog, agents-consistency, routing-flags, landing-paths, home-ui, indexnow, codes-consistency, content-links)
+pnpm test             # Vitest — 20 suites (url, seo, tags, i18n-smoke, content-utils, handbook, workflows, covers, consent, affiliates, prompt, apply-template, sync-codes, today, changelog, agents-consistency, routing-flags, home-ui, indexnow, content-links). Fork note: upstream-only suites removed (community-digest/landing-paths/redirects read landing files deleted by apply-template; codes-consistency needs a codes category); demo-state drift guards inside apply-template/handbook/changelog skip via the IS_PRISTINE_TEMPLATE probe.
 pnpm test:e2e         # apply-template real-mode E2E (git archive → scratch copy → pipe answers → assert shape → build; CI job e2e-template runs it; tests the COMMITTED tree)
 pnpm check-config     # scripts/check-config.ts — nav/locale 3-place consistency
 pnpm new-locale       # scripts/new-locale.ts — scaffold a new language

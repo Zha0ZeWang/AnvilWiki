@@ -124,7 +124,10 @@ describe('shortTitle: nav label derivation', () => {
   });
 });
 
-describe('handbook search contract (Pagefind)', () => {
+// The search-contract tests below read the landing components/pages that
+// fork initialization deletes (HandbookChapter, LandingLayout, digest…),
+// so they only run while the repo is still the pristine upstream template.
+describe.skipIf(!fs.existsSync(path.resolve(ROOT, 'src/components/landing/HandbookChapter.astro')))('handbook search contract (Pagefind)', () => {
   const src = (rel: string) => fs.readFileSync(path.resolve(ROOT, rel), 'utf8');
 
   it('HandbookChapter opts chapters into the search index', () => {
